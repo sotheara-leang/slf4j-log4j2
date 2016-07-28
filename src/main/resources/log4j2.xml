@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<Configuration>
+	<Properties>
+		<Property name="baseDir">logs</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{36}.%M(%F:%L) - %msg%n" />
+		</Console>
+		<RollingFile name="ErrorFileAppender" fileName="${baseDir}/log-error.log"
+			filePattern="${baseDir}/errors/$${date:dd-MM-yyyy}/log-error-%d{yyyy-MM-dd-HH}-%i.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{36}.%M(%F:%L) - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="10 KB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="DebugFileAppender" fileName="${baseDir}/log-debug.log" filePattern="${baseDir}/debugs/$${date:dd-MM-yyyy}/log-debug-%d{yyyy-MM-dd-HH}-%i.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{36}.%M(%F:%L) - %msg%n" />
+			<LevelRangeFilter minLevel="WARN" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="10 KB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="SQLFileAppender" fileName="${baseDir}/log-debug.log" filePattern="${baseDir}/sqls/$${date:dd-MM-yyyy}/sql-%d{yyyy-MM-dd-HH}-%i.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{36}.%M(%F:%L) - %msg%n" />
+			<LevelRangeFilter minLevel="WARN" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="10 KB" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="ErrorFileAppender" />
+			<AppenderRef ref="DebugFileAppender" />
+		</Root>
+		<Logger name="com.mcnc.slf4j.dao">
+			<Level value="DEBUG" />
+			<AppenderRef ref="SQLFileAppender" />
+		</Logger>
+	</Loggers>
+</Configuration>
